@@ -18,23 +18,8 @@ public class Main {
         final Connection connection = Context.init(user);
         final Channel consumer = connection.createChannel();
 
-        consumer.basicConsume("stanze." + user, true, new DefaultConsumer(consumer) {
-            @Override
-            public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) {
-                final Map<String, Object> headers = properties.getHeaders();
-
-                out.println("\t\t[" + headers.get("dataOra") + "] Ricevuto messaggio da " + headers.get("mittente") + " su stanza " +headers.get("stanza") + ": " + new String(body));
-            }
-        });
-
-        consumer.basicConsume("utenti." + user, true, new DefaultConsumer(consumer) {
-            @Override
-            public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) {
-                final Map<String, Object> headers = properties.getHeaders();
-
-                out.println("\t\t[" + headers.get("dataOra") + "] Ricevuto messaggio privato da " + headers.get("mittente") + ": " + new String(body));
-            }
-        });
+        consumer.basicConsume("stanze." + user, true, new PrivateMessageConsumer(consumer));
+        consumer.basicConsume("utenti." + user, true, new PublicMessageConsumer(consumer));
 
         final Channel producer = connection.createChannel();
         boolean exit = false;
