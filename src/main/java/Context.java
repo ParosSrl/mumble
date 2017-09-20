@@ -25,8 +25,6 @@ public class Context {
             channel.queueBind("utenti." + user, "mumble", "utenti." + user);
 
             return connection;
-
-
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

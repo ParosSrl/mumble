@@ -6,11 +6,15 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.rabbitmq.client.BuiltinExchangeType.TOPIC;
 import static java.lang.System.*;
 
 public class Main {
 
     public static void main(String[] args) throws Exception {
+
+
+
         final BufferedReader consoleInput = new BufferedReader(new InputStreamReader(in));
         out.println("Chi sei?");
         String user = consoleInput.readLine();
