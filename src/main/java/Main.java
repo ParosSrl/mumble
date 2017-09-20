@@ -27,6 +27,15 @@ public class Main {
             }
         });
 
+        consumer.basicConsume("utenti." + user, true, new DefaultConsumer(consumer) {
+            @Override
+            public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) {
+                final Map<String, Object> headers = properties.getHeaders();
+
+                out.println("\t\t[" + headers.get("dataOra") + "] Ricevuto messaggio privato da " + headers.get("mittente") + ": " + new String(body));
+            }
+        });
+
         final Channel producer = connection.createChannel();
         boolean exit = false;
         while (!exit) {
