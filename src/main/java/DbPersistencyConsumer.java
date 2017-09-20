@@ -39,7 +39,13 @@ public class DbPersistencyConsumer {
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
                 try {
-                    messages.add(new Message(new String(body), properties.getHeaders().get("dataOra").toString(), properties.getHeaders().get("mittente").toString(), properties.getHeaders().get("stanza").toString()));
+                    final Map<String, Object> headers = properties.getHeaders();
+                    messages.add(new Message(
+                            new String(body),
+                            headers.get("dataOra").toString(),
+                            headers.get("mittente").toString(),
+                            headers.get("stanza").toString())
+                    );
                     sleep(2000);
                     channel.basicAck(envelope.getDeliveryTag(), false);
                 } catch (Exception e) {
