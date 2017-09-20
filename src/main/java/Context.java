@@ -18,8 +18,8 @@ public class Context {
 
             channel.exchangeDeclare("mumble", TOPIC);
 
-            channel.queueDeclare("stanze." + user, true, false, false, null);
-            channel.queueDeclare("utenti." + user, true, false, false, null);
+            channel.queueDeclare("stanze." + user, true, true, false, null);
+            channel.queueDeclare("utenti." + user, true, true, false, null);
 
             channel.queueBind("stanze." + user, "mumble", "stanze.#");
             channel.queueBind("utenti." + user, "mumble", "utenti." + user);
