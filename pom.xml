@@ -26,5 +26,10 @@
             <artifactId>amqp-client</artifactId>
             <version>4.2.1</version>
         </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.3</version>
+        </dependency>
     </dependencies>
 </project>
