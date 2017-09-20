@@ -1,4 +1,6 @@
-import com.rabbitmq.client.*;
+import com.rabbitmq.client.AMQP;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -6,14 +8,12 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.rabbitmq.client.BuiltinExchangeType.TOPIC;
-import static java.lang.System.*;
+import static java.lang.System.in;
+import static java.lang.System.out;
 
 public class Main {
 
     public static void main(String[] args) throws Exception {
-
-
 
         final BufferedReader consoleInput = new BufferedReader(new InputStreamReader(in));
         out.println("Chi sei?");

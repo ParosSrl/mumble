@@ -15,7 +15,7 @@ public class DbPersistencyConsumer {
         connectionFactory.setHost("192.168.102.209");
         connectionFactory.setUsername("test");
         connectionFactory.setPassword("test");
-        List<String> messages = new ArrayList<>();
+        List<Message> messages = new ArrayList<>();
         final Connection connection = connectionFactory.newConnection();
         final Channel channel = connection.createChannel();
 
@@ -26,7 +26,7 @@ public class DbPersistencyConsumer {
         channel.basicConsume("db", false, new DefaultConsumer(channel) {
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
-                messages.add(new String(body));
+                messages.add(new Message(new String(body), properties.getHeaders().get("dataOra").toString(),properties.getHeaders().get("mittente").toString(), properties.getHeaders().get("stanza").toString()));
                 try {
                     sleep(2000);
                 } catch (InterruptedException e) {
