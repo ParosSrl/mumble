@@ -1,5 +1,4 @@
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.*;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -12,22 +11,31 @@ public class Main {
         final BufferedReader consoleInput = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Chi sei?");
         String user = consoleInput.readLine();
-        System.out.println("Su che stanza vuoi mandare il messaggio?");
-        String stanza = consoleInput.readLine();
-        System.out.println("Digita il messaggio da inviare e premi invio!");
-        String message = consoleInput.readLine();
-        System.out.println("Sei stata bravissima!");
-        consoleInput.close();
 
         final Connection connection = Context.init(user);
-        final Channel channel = connection.createChannel();
+        final Channel consumer = connection.createChannel();
 
-        channel.basicPublish("mumble", "stanze." + stanza, PERSISTENT_BASIC, message.getBytes());
+        consumer.basicConsume("stanze."+user, true, new DefaultConsumer(consumer) {
+            @Override
+            public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) {
+                System.out.println("Ricevuto messaggio: " +  new String(body));
+            }
+        });
 
-        System.out.println("Molto bravissima, il tuo messaggio del tuo cuore è stato forse inviato!");
+        final Channel producer = connection.createChannel();
+        while (true) {
+            System.out.println("Su che stanza vuoi mandare il messaggio?");
+            String stanza = consoleInput.readLine();
+            System.out.println("Digita il messaggio da inviare e premi invio!");
+            String message = consoleInput.readLine();
+            System.out.println("Sei stata bravissima!");
 
-        channel.close();
-        connection.close();
+            producer.basicPublish("mumble", "stanze." + stanza, PERSISTENT_BASIC, message.getBytes());
+            System.out.println("Molto bravissima, il tuo messaggio del tuo cuore è stato forse inviato!");
+        }
+
+        /*consoleInput.close();
+        connection.close();*/
     }
 
 
