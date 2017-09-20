@@ -1,11 +1,9 @@
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-import static com.rabbitmq.client.BuiltinExchangeType.TOPIC;
 import static com.rabbitmq.client.MessageProperties.PERSISTENT_BASIC;
 
 public class Main {
@@ -21,25 +19,15 @@ public class Main {
         System.out.println("Sei stata bravissima!");
         consoleInput.close();
 
-        ConnectionFactory connectionFactory = new ConnectionFactory();
-        connectionFactory.setHost("192.168.102.209");
-        connectionFactory.setUsername("test");
-        connectionFactory.setPassword("test");
-
-        final Connection connection = connectionFactory.newConnection();
+        final Connection connection = Context.init(user);
         final Channel channel = connection.createChannel();
-
-        channel.exchangeDeclare("mumble", TOPIC);
-
-        channel.queueDeclare("stanze." + user, true, false, false, null);
-        channel.queueDeclare("utenti." + user, true, false, false, null);
-
-        channel.queueBind("stanze." + user, "mumble", "stanze.#");
-        channel.queueBind("utenti." + user, "mumble", "utenti." + user);
 
         channel.basicPublish("mumble", "stanze." + stanza, PERSISTENT_BASIC, message.getBytes());
 
         System.out.println("Molto bravissima, il tuo messaggio del tuo cuore è stato forse inviato!");
+
+        channel.close();
+        connection.close();
     }
 
 
