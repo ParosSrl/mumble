@@ -13,7 +13,6 @@ public class Context {
             connectionFactory.setUsername("test");
             connectionFactory.setPassword("test");
 
-
             final Connection connection = connectionFactory.newConnection();
             final Channel channel = connection.createChannel();
 
