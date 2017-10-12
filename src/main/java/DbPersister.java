@@ -11,7 +11,7 @@ import static com.rabbitmq.client.BuiltinExchangeType.FANOUT;
 import static com.rabbitmq.client.BuiltinExchangeType.TOPIC;
 import static java.lang.Thread.sleep;
 
-public class DbPersistencyConsumer {
+public class DbPersister {
 
     public static void main(String[] args) throws IOException, TimeoutException {
         ConnectionFactory connectionFactory = new ConnectionFactory();
